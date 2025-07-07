@@ -1,0 +1,31 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import LandingPage from './pages/LandingPage'
+import About from './pages/About'
+import Products from './pages/Products'
+import Contact from './pages/Contact'
+import Checkout from './pages/Checkout'
+import NotFound from './pages/NotFound'
+import './App.css'
+
+function App() {
+  return (
+    <Router>
+      <Header />
+      <div style={{ minHeight: '90vh' }}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/sobre-nosotros" element={<About />} />
+          <Route path="/productos" element={<Products />} />
+          <Route path="/contacto" element={<Contact />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+      <Footer />
+    </Router>
+  )
+}
+
+export default App
