@@ -103,16 +103,6 @@ const Footer = () => (
           }}>
             🌐 Síguenos
           </h4>
-          <div style={{ 
-            display: 'flex', 
-            gap: '1rem',
-            fontSize: '1.5rem',
-          }}>
-            <a href="#" style={{ color: '#a0aec0', transition: 'color 0.3s ease' }}>📘</a>
-            <a href="#" style={{ color: '#a0aec0', transition: 'color 0.3s ease' }}>📷</a>
-            <a href="#" style={{ color: '#a0aec0', transition: 'color 0.3s ease' }}>🐦</a>
-            <a href="#" style={{ color: '#a0aec0', transition: 'color 0.3s ease' }}>📱</a>
-          </div>
         </div>
       </div>
 
