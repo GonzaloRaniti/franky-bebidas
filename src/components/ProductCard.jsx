@@ -153,6 +153,67 @@ const ProductCard = ({ product }) => {
           )}
         </button>
       </div>
+
+      {/* Media queries para responsive */}
+      <style>{`
+        @media (max-width: 768px) {
+          .card {
+            width: 100% !important;
+            max-width: 320px !important;
+            margin: 0.5rem auto !important;
+          }
+          
+          div[style*="height: 200px"] {
+            height: 180px !important;
+          }
+          
+          h3 {
+            font-size: 1.1rem !important;
+          }
+          
+          p {
+            font-size: 0.85rem !important;
+          }
+          
+          span[style*="font-size: 1.3rem"] {
+            font-size: 1.2rem !important;
+          }
+          
+          button {
+            font-size: 0.9rem !important;
+            padding: 10px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .card {
+            width: 100% !important;
+            max-width: 280px !important;
+            padding: 1rem !important;
+          }
+          
+          div[style*="height: 200px"] {
+            height: 160px !important;
+          }
+          
+          h3 {
+            font-size: 1rem !important;
+          }
+          
+          p {
+            font-size: 0.8rem !important;
+          }
+          
+          span[style*="font-size: 1.3rem"] {
+            font-size: 1.1rem !important;
+          }
+          
+          button {
+            font-size: 0.85rem !important;
+            padding: 8px !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }

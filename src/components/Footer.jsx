@@ -103,6 +103,7 @@ const Footer = () => (
           }}>
             🌐 Síguenos
           </h4>
+          {/* Íconos eliminados, solo se deja el título */}
         </div>
       </div>
 
@@ -119,6 +120,78 @@ const Footer = () => (
         </p>
       </div>
     </div>
+
+    {/* Media queries para responsive */}
+    <style>{`
+      @media (max-width: 768px) {
+        footer {
+          padding: 2rem 1rem 1rem !important;
+        }
+        
+        .container {
+          padding: 0 15px !important;
+        }
+        
+        div[style*="gridTemplateColumns"] {
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 1.5rem !important;
+        }
+        
+        h3 {
+          font-size: 1.3rem !important;
+        }
+        
+        h4 {
+          font-size: 1rem !important;
+        }
+        
+        p {
+          font-size: 0.9rem !important;
+        }
+        
+        span {
+          font-size: 0.8rem !important;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        footer {
+          padding: 1.5rem 1rem 1rem !important;
+        }
+        
+        div[style*="gridTemplateColumns"] {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+        }
+        
+        div[style*="display: flex"] {
+          flex-direction: column !important;
+          text-align: center !important;
+        }
+        
+        h3 {
+          font-size: 1.2rem !important;
+        }
+        
+        h4 {
+          font-size: 0.95rem !important;
+        }
+        
+        p {
+          font-size: 0.85rem !important;
+        }
+        
+        span {
+          font-size: 0.75rem !important;
+        }
+        
+        div[style*="width: 50px"] {
+          width: 40px !important;
+          height: 40px !important;
+          font-size: 1.2rem !important;
+        }
+      }
+    `}</style>
   </footer>
 )
 

@@ -1,5 +1,6 @@
 import { useCart } from '../context/CartContext'
 import { useNavigate } from 'react-router-dom'
+import cartIcon from '../assets/carrito-de-compras.png'
 
 const CartModal = ({ open, onClose }) => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCart()
@@ -49,15 +50,30 @@ const CartModal = ({ open, onClose }) => {
           borderBottom: '2px solid #f7fafc',
           paddingBottom: '1rem',
         }}>
-          <h2 style={{ 
-            margin: 0,
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
           }}>
-            🛒 Tu Carrito
-          </h2>
+            <img 
+              src={cartIcon} 
+              alt="Carrito" 
+              style={{ 
+                width: '24px', 
+                height: '24px',
+                filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)', // Color del gradiente
+              }} 
+            />
+            <h2 style={{ 
+              margin: 0,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>
+              Tu Carrito
+            </h2>
+          </div>
           <button 
             onClick={onClose}
             style={{
@@ -77,7 +93,17 @@ const CartModal = ({ open, onClose }) => {
 
         {cart.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <span style={{ fontSize: '4rem', opacity: '0.5' }}>🛒</span>
+            <img 
+              src={cartIcon} 
+              alt="Carrito vacío" 
+              style={{ 
+                width: '64px', 
+                height: '64px',
+                opacity: '0.5',
+                marginBottom: '1rem',
+                filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)',
+              }} 
+            />
             <p style={{ color: '#718096', marginTop: '1rem' }}>Tu carrito está vacío</p>
             <button className="btn" onClick={onClose}>
               Continuar comprando
@@ -191,6 +217,99 @@ const CartModal = ({ open, onClose }) => {
           </>
         )}
       </div>
+
+      {/* Media queries para responsive */}
+      <style>{`
+        @media (max-width: 768px) {
+          div[style*="minWidth: 400px"] {
+            min-width: 95vw !important;
+            max-width: 95vw !important;
+            padding: 1.5rem !important;
+            border-radius: 15px !important;
+          }
+          
+          div[style*="display: flex"] {
+            flex-direction: column !important;
+            gap: 0.5rem !important;
+          }
+          
+          div[style*="width: 60px"] {
+            width: 50px !important;
+            height: 50px !important;
+          }
+          
+          span[style*="font-size: 1.5rem"] {
+            font-size: 1.2rem !important;
+          }
+          
+          input[type="number"] {
+            width: 50px !important;
+            font-size: 14px !important;
+          }
+          
+          button {
+            font-size: 0.9rem !important;
+            padding: 8px 12px !important;
+          }
+          
+          h2 {
+            font-size: 1.5rem !important;
+          }
+          
+          h4 {
+            font-size: 0.9rem !important;
+          }
+          
+          p {
+            font-size: 0.85rem !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          div[style*="minWidth: 400px"] {
+            min-width: 98vw !important;
+            max-width: 98vw !important;
+            padding: 1rem !important;
+            border-radius: 10px !important;
+          }
+          
+          div[style*="padding: 1rem"] {
+            padding: 0.75rem !important;
+          }
+          
+          div[style*="width: 60px"] {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          
+          span[style*="font-size: 1.5rem"] {
+            font-size: 1rem !important;
+          }
+          
+          input[type="number"] {
+            width: 45px !important;
+            font-size: 12px !important;
+            padding: 0.25rem !important;
+          }
+          
+          button {
+            font-size: 0.8rem !important;
+            padding: 6px 10px !important;
+          }
+          
+          h2 {
+            font-size: 1.3rem !important;
+          }
+          
+          h4 {
+            font-size: 0.85rem !important;
+          }
+          
+          p {
+            font-size: 0.8rem !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }

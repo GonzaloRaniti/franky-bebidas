@@ -201,66 +201,124 @@ const Hero = () => (
         </div>
       </div>
       
-      <div style={{ 
-        display: 'flex', 
-        gap: '1.5rem', 
-        justifyContent: 'center', 
+      {/* Botones de acción */}
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
+        justifyContent: 'center',
         flexWrap: 'wrap',
         animation: 'slideInUp 1s ease-out 1s both',
       }}>
         <Link to="/productos">
           <button className="btn" style={{ 
-            fontSize: '1.2rem', 
-            padding: '18px 36px',
+            fontSize: '1.2rem',
+            padding: '15px 30px',
             borderRadius: '50px',
-            boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)',
-            transform: 'scale(1)',
-            transition: 'all 0.3s ease',
+            boxShadow: '0 8px 25px rgba(102, 126, 234, 0.4)',
           }}>
             🛍️ Ver Productos
           </button>
         </Link>
         <Link to="/sobre-nosotros">
           <button className="btn btn-secondary" style={{ 
-            fontSize: '1.2rem', 
-            padding: '18px 36px',
+            fontSize: '1.2rem',
+            padding: '15px 30px',
             borderRadius: '50px',
-            border: '2px solid white',
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
+            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.3)',
           }}>
-            📖 Conocenos
+            📖 Sobre Nosotros
           </button>
         </Link>
       </div>
-      
-      {/* Scroll indicator */}
-      <div style={{
-        position: 'absolute',
-        bottom: '2rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        animation: 'bounce 2s ease-in-out infinite',
-      }}>
-        <span style={{ color: 'white', fontSize: '2rem' }}>⬇️</span>
-      </div>
     </div>
-    
+
+    {/* Media queries para responsive */}
     <style>{`
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-30px) rotate(180deg); }
+      @media (max-width: 768px) {
+        section {
+          padding: 4rem 1rem !important;
+          min-height: 80vh !important;
+        }
+        
+        h1 {
+          font-size: 3rem !important;
+        }
+        
+        h2 {
+          font-size: 1.8rem !important;
+        }
+        
+        p {
+          font-size: 1.2rem !important;
+        }
+        
+        div[style*="width: 120px"] {
+          width: 80px !important;
+          height: 80px !important;
+          font-size: 2.5rem !important;
+        }
+        
+        div[style*="padding: 2rem 3rem"] {
+          padding: 1.5rem 2rem !important;
+        }
+        
+        div[style*="gap: 3rem"] {
+          gap: 1.5rem !important;
+        }
+        
+        div[style*="font-size: 2.5rem"] {
+          font-size: 2rem !important;
+        }
+        
+        div[style*="font-size: 1rem"] {
+          font-size: 0.9rem !important;
+        }
+        
+        button {
+          font-size: 1rem !important;
+          padding: 12px 24px !important;
+        }
       }
       
-      @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-10px); }
-        60% { transform: translateY(-5px); }
-      }
-      
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
+      @media (max-width: 480px) {
+        section {
+          padding: 3rem 1rem !important;
+        }
+        
+        h1 {
+          font-size: 2.5rem !important;
+        }
+        
+        h2 {
+          font-size: 1.5rem !important;
+        }
+        
+        p {
+          font-size: 1.1rem !important;
+        }
+        
+        div[style*="width: 120px"] {
+          width: 60px !important;
+          height: 60px !important;
+          font-size: 2rem !important;
+        }
+        
+        div[style*="padding: 2rem 3rem"] {
+          padding: 1rem 1.5rem !important;
+        }
+        
+        div[style*="gap: 3rem"] {
+          gap: 1rem !important;
+        }
+        
+        div[style*="font-size: 2.5rem"] {
+          font-size: 1.5rem !important;
+        }
+        
+        button {
+          font-size: 0.9rem !important;
+          padding: 10px 20px !important;
+        }
       }
       
       @keyframes slideInUp {
@@ -272,6 +330,22 @@ const Hero = () => (
           opacity: 1;
           transform: translateY(0);
         }
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
       }
     `}</style>
   </section>

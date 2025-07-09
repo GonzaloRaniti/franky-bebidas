@@ -83,6 +83,100 @@ const Products = () => {
           </div>
         )}
       </div>
+
+      {/* Media queries para responsive */}
+      <style>{`
+        @media (max-width: 768px) {
+          .main-content {
+            padding: 1rem !important;
+          }
+          
+          h1 {
+            font-size: 2rem !important;
+            margin-bottom: 1.5rem !important;
+          }
+          
+          .card {
+            padding: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
+          }
+          
+          div[style*="display: flex"] {
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+          }
+          
+          label {
+            font-size: 0.9rem !important;
+          }
+          
+          select, input {
+            font-size: 14px !important;
+            padding: 0.75rem !important;
+          }
+          
+          div[style*="gap: 2rem"] {
+            gap: 1rem !important;
+          }
+          
+          p {
+            font-size: 0.9rem !important;
+          }
+          
+          span[style*="font-size: 4rem"] {
+            font-size: 3rem !important;
+          }
+          
+          p[style*="font-size: 1.2rem"] {
+            font-size: 1rem !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .main-content {
+            padding: 0.5rem !important;
+          }
+          
+          h1 {
+            font-size: 1.8rem !important;
+            margin-bottom: 1rem !important;
+          }
+          
+          .card {
+            padding: 1rem !important;
+            margin-bottom: 1rem !important;
+          }
+          
+          div[style*="display: flex"] {
+            gap: 0.5rem !important;
+          }
+          
+          label {
+            font-size: 0.85rem !important;
+          }
+          
+          select, input {
+            font-size: 12px !important;
+            padding: 0.5rem !important;
+          }
+          
+          div[style*="gap: 2rem"] {
+            gap: 0.5rem !important;
+          }
+          
+          p {
+            font-size: 0.8rem !important;
+          }
+          
+          span[style*="font-size: 4rem"] {
+            font-size: 2.5rem !important;
+          }
+          
+          p[style*="font-size: 1.2rem"] {
+            font-size: 0.9rem !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }
