@@ -7,6 +7,16 @@ import whisky2 from '../assets/whisky2.jpg'
 import whisky3 from '../assets/whisky3.webp'
 import fernet from '../assets/fernet.webp'
 import vodka from '../assets/vodka.jpg'
+import cervezaRubia from '../assets/cerveza-rubia.png'
+import vinoMalbec from '../assets/vino-malbec.png'
+import ginTonic from '../assets/gin-tonico.png'
+import limonada from '../assets/Limonada.png'
+import cervezaNegra from '../assets/cerveza-negra.png'
+import gaseosaLimon from '../assets/gaseosa-limon.png'
+import vinoChardonnay from '../assets/vino-chardonnay.png'
+import aguaConGas from '../assets/agua-con.gas.png'
+import sprite from '../assets/sprite.jpg'
+import cervezaRoja from '../assets/cerveza-roja.jpg'
 
 const products = [
   {
@@ -14,7 +24,7 @@ const products = [
     name: 'Cerveza Rubia 1L',
     description: 'Cerveza artesanal rubia, botella de 1 litro. Sabor suave y refrescante.',
     price: 1200,
-    image: '🍺', 
+    image: cervezaRubia, 
     featured: true,
     category: 'alcoholicas',
   },
@@ -23,7 +33,7 @@ const products = [
     name: 'Vino Malbec 750ml',
     description: 'Vino tinto Malbec premium, botella de 750ml. Aromas intensos y taninos suaves.',
     price: 2500,
-    image: '🍷', 
+    image: vinoMalbec, 
     featured: true,
     category: 'alcoholicas',
   },
@@ -59,7 +69,7 @@ const products = [
     name: 'Gin Tónico 330ml',
     description: 'Gin tónico listo para beber, lata de 330ml. Refrescante y aromático.',
     price: 800,
-    image: '🍸', // Fallback emoji hasta que subas la imagen
+    image: ginTonic, 
     featured: false,
     category: 'alcoholicas',
   },
@@ -68,7 +78,7 @@ const products = [
     name: 'Limonada Natural 1L',
     description: 'Limonada natural sin conservantes, botella de 1 litro. Refrescante y saludable.',
     price: 750,
-    image: '🍋', 
+    image: limonada, 
     featured: false,
     category: 'sin-alcohol',
   },
@@ -77,7 +87,7 @@ const products = [
     name: 'Cerveza Negra 500ml',
     description: 'Cerveza negra artesanal, botella de 500ml. Sabor robusto y maltoso.',
     price: 950,
-    image: '🍺', 
+    image: cervezaNegra, 
     featured: false,
     category: 'alcoholicas',
   },
@@ -86,7 +96,7 @@ const products = [
     name: 'Gaseosa Limón 1.5L',
     description: 'Gaseosa sabor limón, botella de 1.5 litros. Refrescante y cítrica.',
     price: 750,
-    image: '🥤', 
+    image: gaseosaLimon, 
     featured: false,
     category: 'gaseosas',
   },
@@ -95,7 +105,7 @@ const products = [
     name: 'Vino Blanco Chardonnay',
     description: 'Vino blanco Chardonnay, botella de 750ml. Aromas frutales y frescos.',
     price: 1800,
-    image: '🍷', 
+    image: vinoChardonnay, 
     featured: false,
     category: 'alcoholicas',
   },
@@ -113,7 +123,7 @@ const products = [
     name: 'Agua con Gas 500ml',
     description: 'Agua con gas natural, botella de 500ml. Burbujas finas y refrescantes.',
     price: 450,
-    image: '💧', 
+    image: aguaConGas, 
     featured: false,
     category: 'sin-alcohol',
   },
@@ -153,7 +163,24 @@ const products = [
     featured: false,
     category: 'alcoholicas',
   },
- 
+  {
+    id: 17,
+    name: 'Sprite 2.25L',
+    description: 'Gaseosa Sprite, botella de 2.25 litros. Refrescante sabor lima-limón.',
+    price: 850,
+    image: sprite,
+    featured: false,
+    category: 'gaseosas',
+  },
+  {
+    id: 18,
+    name: 'Cerveza Roja 500ml',
+    description: 'Cerveza roja artesanal, botella de 500ml. Sabor maltoso y equilibrado.',
+    price: 1100,
+    image: cervezaRoja,
+    featured: false,
+    category: 'alcoholicas',
+  },
 ]
 
 export default products 

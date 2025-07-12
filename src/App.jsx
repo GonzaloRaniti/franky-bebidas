@@ -6,6 +6,7 @@ import About from './pages/About'
 import Products from './pages/Products'
 import Contact from './pages/Contact'
 import Checkout from './pages/Checkout'
+import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
 import './App.css'
 
@@ -13,13 +14,14 @@ function App() {
   return (
     <Router>
       <Header />
-      <div style={{ minHeight: '90vh' }}>
+      <div>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/sobre-nosotros" element={<About />} />
           <Route path="/productos" element={<Products />} />
           <Route path="/contacto" element={<Contact />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

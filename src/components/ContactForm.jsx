@@ -1,170 +1,185 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import './ContactForm.css'
+
+const initialValues = {
+  nombre: '',
+  apellido: '',
+  email: '',
+  asunto: '',
+}
+
+const validationSchema = Yup.object({
+  nombre: Yup.string()
+    .required('El nombre es obligatorio')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .max(50, 'El nombre no puede exceder 50 caracteres'),
+  apellido: Yup.string()
+    .required('El apellido es obligatorio')
+    .min(2, 'El apellido debe tener al menos 2 caracteres')
+    .max(50, 'El apellido no puede exceder 50 caracteres'),
+  email: Yup.string()
+    .email('Email inválido')
+    .required('El email es obligatorio'),
+  asunto: Yup.string()
+    .required('El mensaje es obligatorio')
+    .min(10, 'El mensaje debe tener al menos 10 caracteres')
+    .max(500, 'El mensaje no puede exceder 500 caracteres'),
+})
 
 const ContactForm = () => {
-  const [sent, setSent] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  const [notificationMessage, setNotificationMessage] = useState('')
+  const [notificationType, setNotificationType] = useState('success')
 
-  const initialValues = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    asunto: '',
+  // Auto-guardado de borrador
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('contactFormDraft')
+    if (savedDraft) {
+      const draft = JSON.parse(savedDraft)
+      // Solo restaurar si el borrador es reciente (menos de 1 hora)
+      const oneHourAgo = Date.now() - (60 * 60 * 1000)
+      if (draft.timestamp > oneHourAgo) {
+        console.log('Borrador restaurado automáticamente')
+      }
+    }
+  }, [])
+
+  const saveDraft = (values) => {
+    const draft = {
+      ...values,
+      timestamp: Date.now()
+    }
+    localStorage.setItem('contactFormDraft', JSON.stringify(draft))
   }
 
-  const validationSchema = Yup.object({
-    nombre: Yup.string().required('El nombre es requerido'),
-    apellido: Yup.string().required('El apellido es requerido'),
-    email: Yup.string().email('Email inválido').required('El email es requerido'),
-    asunto: Yup.string().required('El asunto es requerido'),
-  })
+  const showToast = (message, type = 'success') => {
+    setNotificationMessage(message)
+    setNotificationType(type)
+    setShowNotification(true)
+    setTimeout(() => setShowNotification(false), 3000)
+  }
 
-  const handleSubmit = (values, { resetForm }) => {
-    setSent(true)
-    setTimeout(() => setSent(false), 3000)
-    resetForm()
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+    setTimeout(() => {
+      // Guardar en localStorage
+      const formData = {
+        ...values,
+        fecha: new Date().toISOString(),
+        id: Date.now(),
+        estado: 'nuevo'
+      }
+      
+      // Obtener mensajes existentes o crear array vacío
+      const mensajesExistentes = JSON.parse(localStorage.getItem('mensajesContacto') || '[]')
+      
+      // Agregar nuevo mensaje
+      mensajesExistentes.push(formData)
+      
+      // Guardar en localStorage
+      localStorage.setItem('mensajesContacto', JSON.stringify(mensajesExistentes))
+      
+      // Limpiar borrador
+      localStorage.removeItem('contactFormDraft')
+      
+      // Actualizar analytics
+      const analytics = JSON.parse(localStorage.getItem('contactAnalytics') || '{}')
+      analytics.totalMensajes = (analytics.totalMensajes || 0) + 1
+      analytics.ultimoEnvio = new Date().toISOString()
+      analytics.mensajesPorDia = analytics.mensajesPorDia || {}
+      const hoy = new Date().toDateString()
+      analytics.mensajesPorDia[hoy] = (analytics.mensajesPorDia[hoy] || 0) + 1
+      localStorage.setItem('contactAnalytics', JSON.stringify(analytics))
+      
+      showToast('¡Mensaje enviado y guardado exitosamente!', 'success')
+      setSubmitting(false)
+      resetForm()
+    }, 1000)
   }
 
   return (
-    <div className="card" style={{ 
-      maxWidth: '500px', 
-      margin: '0 auto',
-      padding: '2rem',
-    }}>
-      <h2 style={{ 
-        textAlign: 'center',
-        marginBottom: '2rem',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
-      }}>
-        📧 Contáctanos
-      </h2>
+    <div className="contact-form-container">
+      <h2 className="contact-form-title">📧 Contáctanos</h2>
       
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({ isSubmitting, isValid }) => (
-          <Form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {/* Notificación Toast */}
+      {showNotification && (
+        <div className={`toast-notification ${notificationType}`}>
+          {notificationMessage}
+        </div>
+      )}
+      
+      <Formik 
+        initialValues={initialValues} 
+        validationSchema={validationSchema} 
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting, isValid, values, setFieldValue }) => (
+          <Form className="contact-form-fields">
             <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem',
-                fontWeight: '600',
-                color: '#2d3748',
-              }}>
-                Nombre *
-              </label>
+              <label className="contact-form-label">Nombre *</label>
               <Field 
                 name="nombre" 
                 type="text" 
                 placeholder="Tu nombre"
-                style={{ marginBottom: '0.25rem' }}
+                className="contact-form-input"
+                onChange={(e) => {
+                  setFieldValue('nombre', e.target.value)
+                  saveDraft({ ...values, nombre: e.target.value })
+                }}
               />
-              <ErrorMessage name="nombre" component="div" style={{ 
-                color: '#e53e3e', 
-                fontSize: '0.875rem',
-                marginTop: '0.25rem',
-              }} />
+              <ErrorMessage name="nombre" component="div" className="contact-form-error" />
             </div>
-
             <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem',
-                fontWeight: '600',
-                color: '#2d3748',
-              }}>
-                Apellido *
-              </label>
+              <label className="contact-form-label">Apellido *</label>
               <Field 
                 name="apellido" 
                 type="text" 
                 placeholder="Tu apellido"
-                style={{ marginBottom: '0.25rem' }}
+                className="contact-form-input"
+                onChange={(e) => {
+                  setFieldValue('apellido', e.target.value)
+                  saveDraft({ ...values, apellido: e.target.value })
+                }}
               />
-              <ErrorMessage name="apellido" component="div" style={{ 
-                color: '#e53e3e', 
-                fontSize: '0.875rem',
-                marginTop: '0.25rem',
-              }} />
+              <ErrorMessage name="apellido" component="div" className="contact-form-error" />
             </div>
-
             <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem',
-                fontWeight: '600',
-                color: '#2d3748',
-              }}>
-                Email *
-              </label>
+              <label className="contact-form-label">Email *</label>
               <Field 
                 name="email" 
                 type="email" 
                 placeholder="tu@email.com"
-                style={{ marginBottom: '0.25rem' }}
+                className="contact-form-input"
+                onChange={(e) => {
+                  setFieldValue('email', e.target.value)
+                  saveDraft({ ...values, email: e.target.value })
+                }}
               />
-              <ErrorMessage name="email" component="div" style={{ 
-                color: '#e53e3e', 
-                fontSize: '0.875rem',
-                marginTop: '0.25rem',
-              }} />
+              <ErrorMessage name="email" component="div" className="contact-form-error" />
             </div>
-
             <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem',
-                fontWeight: '600',
-                color: '#2d3748',
-              }}>
-                Asunto *
-              </label>
+              <label className="contact-form-label">Asunto *</label>
               <Field 
                 name="asunto" 
                 as="textarea" 
                 placeholder="¿En qué podemos ayudarte?"
                 rows="4"
-                style={{ 
-                  marginBottom: '0.25rem',
-                  resize: 'vertical',
-                  minHeight: '100px',
+                className="contact-form-textarea"
+                onChange={(e) => {
+                  setFieldValue('asunto', e.target.value)
+                  saveDraft({ ...values, asunto: e.target.value })
                 }}
               />
-              <ErrorMessage name="asunto" component="div" style={{ 
-                color: '#e53e3e', 
-                fontSize: '0.875rem',
-                marginTop: '0.25rem',
-              }} />
+              <ErrorMessage name="asunto" component="div" className="contact-form-error" />
             </div>
-
             <button 
               type="submit" 
+              className="btn contact-form-btn"
               disabled={isSubmitting || !isValid}
-              className="btn"
-              style={{ 
-                marginTop: '1rem',
-                fontSize: '1.1rem',
-                padding: '15px',
-                opacity: isSubmitting || !isValid ? 0.6 : 1,
-              }}
             >
-              {isSubmitting ? 'Enviando...' : '📤 Enviar mensaje'}
+              {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
             </button>
-
-            {sent && (
-              <div style={{ 
-                background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                color: 'white',
-                padding: '1rem',
-                borderRadius: '8px',
-                textAlign: 'center',
-                marginTop: '1rem',
-                animation: 'fadeIn 0.5s ease-out',
-              }}>
-                ✅ ¡Mensaje enviado correctamente! Te responderemos pronto.
-              </div>
-            )}
           </Form>
         )}
       </Formik>

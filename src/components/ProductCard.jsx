@@ -1,12 +1,19 @@
 import { useCart } from '../context/CartContext'
 import { useState } from 'react'
+import ConfirmModal from './ConfirmModal'
+import './ProductCard.css'
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart()
   const [added, setAdded] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
 
   const handleAddToCart = () => {
+    setShowAddModal(true)
+  }
+
+  const confirmAddToCart = () => {
     addToCart(product)
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
@@ -17,204 +24,63 @@ const ProductCard = ({ product }) => {
   }
 
   return (
-    <div className="card fade-in" style={{
-      width: '280px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '1.5rem',
-      margin: '0.5rem',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Badge de destacado */}
-      {product.featured && (
-        <div style={{
-          position: 'absolute',
-          top: '1rem',
-          right: '1rem',
-          background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
-          color: 'white',
-          padding: '0.25rem 0.75rem',
-          borderRadius: '20px',
-          fontSize: '0.8rem',
-          fontWeight: 'bold',
-          zIndex: 10,
-        }}>
-          ⭐ Destacado
-        </div>
-      )}
-      
-      {/* Imagen del producto */}
-      <div style={{
-        width: '100%',
-        height: '200px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: '1rem',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {!imageError && product.image ? (
-          <img 
-            src={product.image} 
-            alt={product.name}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              objectFit: 'cover',
-              borderRadius: '12px',
-            }}
-            onError={handleImageError}
-          />
-        ) : (
-          <span style={{ fontSize: '4rem', opacity: '0.8' }}>
-            {product.category === 'alcoholicas' ? '🍺' : 
-             product.category === 'gaseosas' ? '🥤' : '💧'}
-          </span>
+    <>
+      <div className="card fade-in product-card">
+        {/* Badge de destacado */}
+        {product.featured && (
+          <div className="product-card-featured">
+            ⭐ Destacado
+          </div>
         )}
-      </div>
-      
-      {/* Información del producto */}
-      <div style={{ textAlign: 'center', width: '100%' }}>
-        <h3 style={{ 
-          margin: '0 0 0.5rem 0',
-          fontSize: '1.2rem',
-          fontWeight: '600',
-          color: '#2d3748',
-        }}>
-          {product.name}
-        </h3>
-        <p style={{ 
-          fontSize: '0.9rem', 
-          color: '#718096',
-          marginBottom: '1rem',
-          lineHeight: '1.4',
-        }}>
-          {product.description}
-        </p>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '100%',
-          marginBottom: '1rem',
-        }}>
-          <span style={{
-            fontSize: '1.3rem',
-            fontWeight: 'bold',
-            color: '#667eea',
-          }}>
-            ${product.price.toLocaleString()}
-          </span>
-          <span style={{
-            fontSize: '0.8rem',
-            color: '#a0aec0',
-            textTransform: 'uppercase',
-            fontWeight: '500',
-          }}>
-            {product.category}
-          </span>
-        </div>
-        <button 
-          onClick={handleAddToCart} 
-          className="btn"
-          style={{ 
-            width: '100%',
-            padding: '12px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {added ? (
-            <span style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: '0.5rem',
-              animation: 'fadeIn 0.3s ease-out',
-            }}>
-              ✅ Agregado
-            </span>
+        {/* Imagen del producto */}
+        <div className="product-card-image">
+          {!imageError && product.image ? (
+            <img 
+              src={product.image} 
+              alt={product.name}
+              className="product-card-img"
+              onError={handleImageError}
+            />
           ) : (
-            <span style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: '0.5rem',
-            }}>
-              🛒 Agregar al carrito
+            <span className="product-card-emoji">
+              {product.category === 'alcoholicas' ? '🍺' : 
+               product.category === 'gaseosas' ? '🥤' : '💧'}
             </span>
           )}
-        </button>
+        </div>
+        {/* Información del producto */}
+        <div className="product-card-info">
+          <h3 className="product-card-title">{product.name}</h3>
+          <p className="product-card-desc">{product.description}</p>
+          <div className="product-card-details">
+            <span className="product-card-price">
+              ${product.price.toLocaleString()}
+            </span>
+            <span className="product-card-category">
+              {product.category}
+            </span>
+          </div>
+          <button 
+            className="btn product-card-btn" 
+            onClick={handleAddToCart} 
+            disabled={added}
+          >
+            {added ? 'Agregado!' : 'Agregar al carrito'}
+          </button>
+        </div>
       </div>
 
-      {/* Media queries para responsive */}
-      <style>{`
-        @media (max-width: 768px) {
-          .card {
-            width: 100% !important;
-            max-width: 320px !important;
-            margin: 0.5rem auto !important;
-          }
-          
-          div[style*="height: 200px"] {
-            height: 180px !important;
-          }
-          
-          h3 {
-            font-size: 1.1rem !important;
-          }
-          
-          p {
-            font-size: 0.85rem !important;
-          }
-          
-          span[style*="font-size: 1.3rem"] {
-            font-size: 1.2rem !important;
-          }
-          
-          button {
-            font-size: 0.9rem !important;
-            padding: 10px !important;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .card {
-            width: 100% !important;
-            max-width: 280px !important;
-            padding: 1rem !important;
-          }
-          
-          div[style*="height: 200px"] {
-            height: 160px !important;
-          }
-          
-          h3 {
-            font-size: 1rem !important;
-          }
-          
-          p {
-            font-size: 0.8rem !important;
-          }
-          
-          span[style*="font-size: 1.3rem"] {
-            font-size: 1.1rem !important;
-          }
-          
-          button {
-            font-size: 0.85rem !important;
-            padding: 8px !important;
-          }
-        }
-      `}</style>
-    </div>
+      {/* Modal de confirmación para agregar al carrito */}
+      <ConfirmModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onConfirm={confirmAddToCart}
+        title="Agregar al Carrito"
+        message={`¿Quieres agregar "${product.name}" al carrito por $${product.price.toLocaleString()}?`}
+        confirmText="Agregar"
+        cancelText="Cancelar"
+      />
+    </>
   )
 }
 

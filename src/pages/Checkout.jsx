@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useNavigate } from 'react-router-dom'
+import ConfirmModal from '../components/ConfirmModal'
+import './Checkout.css'
 
 const Checkout = () => {
   const { cart, clearCart } = useCart()
@@ -16,6 +18,7 @@ const Checkout = () => {
     codigoPostal: '',
   })
   const [showSuccess, setShowSuccess] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
 
@@ -28,6 +31,10 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setShowConfirmModal(true)
+  }
+
+  const confirmPurchase = () => {
     setShowSuccess(true)
     setTimeout(() => {
       clearCart()
@@ -38,8 +45,8 @@ const Checkout = () => {
   if (cart.length === 0) {
     return (
       <div className="main-content">
-        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
-          <span style={{ fontSize: '4rem', opacity: '0.5' }}>🛒</span>
+        <div className="card checkout-card checkout-empty">
+          <span className="checkout-empty-icon">🛒</span>
           <h2>Tu carrito está vacío</h2>
           <p>Agrega productos para continuar con la compra</p>
           <button className="btn" onClick={() => navigate('/productos')}>
@@ -53,17 +60,12 @@ const Checkout = () => {
   if (showSuccess) {
     return (
       <div className="main-content">
-        <div className="card" style={{ 
-          textAlign: 'center', 
-          padding: '3rem',
-          background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-          color: 'white',
-        }}>
-          <span style={{ fontSize: '4rem', marginBottom: '1rem' }}>✅</span>
+        <div className="card checkout-card checkout-success">
+          <span className="checkout-success-icon">✅</span>
           <h2>¡Compra realizada con éxito!</h2>
           <p>Tu pedido ha sido procesado correctamente</p>
           <p>Te enviaremos un email con los detalles de tu compra</p>
-          <div style={{ marginTop: '2rem' }}>
+          <div className="checkout-success-details">
             <p>Total pagado: <strong>${total.toLocaleString()}</strong></p>
             <p>Método de pago: <strong>{paymentMethod}</strong></p>
           </div>
@@ -73,57 +75,37 @@ const Checkout = () => {
   }
 
   return (
-    <div className="main-content">
-      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>💳 Finalizar Compra</h1>
-      
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-        gap: '2rem',
-      }}>
+    <div className="main-content checkout-main">
+      <h1 className="checkout-title">💳 Finalizar Compra</h1>
+      <div className="checkout-grid">
         {/* Resumen del carrito */}
-        <div className="card" style={{ padding: '2rem' }}>
-          <h3 style={{ marginBottom: '1.5rem' }}>🛒 Resumen del pedido</h3>
-          <div style={{ marginBottom: '2rem' }}>
+        <div className="card checkout-card">
+          <h3 className="checkout-summary-title">🛒 Resumen del pedido</h3>
+          <div>
             {cart.map(item => (
-              <div key={item.id} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '1rem 0',
-                borderBottom: '1px solid #e2e8f0',
-              }}>
+              <div key={item.id} className="checkout-summary-item">
                 <div>
-                  <h4 style={{ margin: '0 0 0.25rem 0' }}>{item.name}</h4>
-                  <p style={{ margin: 0, color: '#718096', fontSize: '0.9rem' }}>
-                    Cantidad: {item.quantity}
-                  </p>
+                  <h4>{item.name}</h4>
+                  <p>Cantidad: {item.quantity}</p>
                 </div>
-                <span style={{ fontWeight: 'bold', color: '#667eea' }}>
+                <span className="checkout-item-price">
                   ${(item.price * item.quantity).toLocaleString()}
                 </span>
               </div>
             ))}
           </div>
-          <div style={{
-            borderTop: '2px solid #e2e8f0',
-            paddingTop: '1rem',
-            fontSize: '1.2rem',
-            fontWeight: 'bold',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}>
+          <div className="checkout-summary-total">
             <span>Total:</span>
-            <span style={{ color: '#667eea' }}>${total.toLocaleString()}</span>
+            <span>${total.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Formulario de pago */}
-        <div className="card" style={{ padding: '2rem' }}>
-          <h3 style={{ marginBottom: '1.5rem' }}>📋 Datos de envío</h3>
+        <div className="card checkout-card">
+          <h3 className="checkout-form-title">📋 Datos de envío</h3>
           <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-              <div>
+            <div className="checkout-form-grid">
+              <div className="checkout-form-group">
                 <label>Nombre *</label>
                 <input
                   type="text"
@@ -133,7 +115,7 @@ const Checkout = () => {
                   required
                 />
               </div>
-              <div>
+              <div className="checkout-form-group">
                 <label>Apellido *</label>
                 <input
                   type="text"
@@ -144,8 +126,7 @@ const Checkout = () => {
                 />
               </div>
             </div>
-            
-            <div style={{ marginBottom: '1rem' }}>
+            <div className="checkout-form-group">
               <label>Email *</label>
               <input
                 type="email"
@@ -155,8 +136,7 @@ const Checkout = () => {
                 required
               />
             </div>
-            
-            <div style={{ marginBottom: '1rem' }}>
+            <div className="checkout-form-group">
               <label>Teléfono *</label>
               <input
                 type="tel"
@@ -166,8 +146,7 @@ const Checkout = () => {
                 required
               />
             </div>
-            
-            <div style={{ marginBottom: '1rem' }}>
+            <div className="checkout-form-group">
               <label>Dirección *</label>
               <input
                 type="text"
@@ -177,9 +156,8 @@ const Checkout = () => {
                 required
               />
             </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
-              <div>
+            <div className="checkout-form-grid">
+              <div className="checkout-form-group">
                 <label>Ciudad *</label>
                 <input
                   type="text"
@@ -189,7 +167,7 @@ const Checkout = () => {
                   required
                 />
               </div>
-              <div>
+              <div className="checkout-form-group">
                 <label>Código Postal *</label>
                 <input
                   type="text"
@@ -200,64 +178,62 @@ const Checkout = () => {
                 />
               </div>
             </div>
-
-            <h3 style={{ marginBottom: '1.5rem' }}>💳 Método de pago</h3>
-            <div style={{ marginBottom: '2rem' }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="tarjeta"
-                    checked={paymentMethod === 'tarjeta'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    required
-                  />
-                  💳 Tarjeta de Crédito/Débito
-                </label>
-              </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="mercadopago"
-                    checked={paymentMethod === 'mercadopago'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    required
-                  />
-                  🟡 Mercado Pago
-                </label>
-              </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="efectivo"
-                    checked={paymentMethod === 'efectivo'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    required
-                  />
-                  💵 Efectivo (Contra entrega)
-                </label>
-              </div>
+            <h3 className="checkout-payment-title">💳 Método de pago</h3>
+            <div className="checkout-payment-options">
+              <label className="checkout-payment-label">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="tarjeta"
+                  checked={paymentMethod === 'tarjeta'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  required
+                />
+                💳 Tarjeta de Crédito/Débito
+              </label>
+              <label className="checkout-payment-label">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="mercadopago"
+                  checked={paymentMethod === 'mercadopago'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  required
+                />
+                🟡 Mercado Pago
+              </label>
+              <label className="checkout-payment-label">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="efectivo"
+                  checked={paymentMethod === 'efectivo'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  required
+                />
+                💵 Efectivo (Contra entrega)
+              </label>
             </div>
-
             <button 
               type="submit" 
-              className="btn"
-              style={{ 
-                width: '100%',
-                fontSize: '1.2rem',
-                padding: '15px',
-              }}
+              className="btn checkout-confirm-btn"
             >
               💳 Confirmar Compra - ${total.toLocaleString()}
             </button>
           </form>
         </div>
       </div>
+
+      {/* Modal de confirmación de compra */}
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={confirmPurchase}
+        title="Confirmar Compra"
+        message={`¿Estás seguro de que quieres realizar la compra por $${total.toLocaleString()}? Esta acción no se puede deshacer.`}
+        confirmText="Confirmar Compra"
+        cancelText="Cancelar"
+      />
     </div>
   )
 }
