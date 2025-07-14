@@ -22,9 +22,11 @@ const CartModal = ({ open, onClose }) => {
     setShowRemoveModal(true)
   }
 
+  // Ahora elimina el producto y cierra el modal
   const confirmRemoveItem = () => {
     if (itemToRemove) {
       removeFromCart(itemToRemove.id)
+      setShowRemoveModal(false)
       setItemToRemove(null)
     }
   }
@@ -33,8 +35,10 @@ const CartModal = ({ open, onClose }) => {
     setShowClearModal(true)
   }
 
+  // Vacía el carrito y cierra el modal
   const confirmClearCart = () => {
     clearCart()
+    setShowClearModal(false)
   }
 
   const handleCheckout = () => {
