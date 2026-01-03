@@ -7,6 +7,8 @@ import Products from './pages/Products'
 import Contact from './pages/Contact'
 import Checkout from './pages/Checkout'
 import Admin from './pages/Admin'
+import Login from './pages/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 import NotFound from './pages/NotFound'
 import './App.css'
 
@@ -21,7 +23,15 @@ function App() {
           <Route path="/productos" element={<Products />} />
           <Route path="/contacto" element={<Contact />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

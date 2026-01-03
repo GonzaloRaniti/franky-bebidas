@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useNavigate } from 'react-router-dom'
+import { ordersAPI } from '../services/api'
 import ConfirmModal from '../components/ConfirmModal'
 import './Checkout.css'
 
@@ -19,6 +20,8 @@ const Checkout = () => {
   })
   const [showSuccess, setShowSuccess] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
 
@@ -34,12 +37,35 @@ const Checkout = () => {
     setShowConfirmModal(true)
   }
 
-  const confirmPurchase = () => {
-    setShowSuccess(true)
-    setTimeout(() => {
-      clearCart()
-      navigate('/')
-    }, 3000)
+  const confirmPurchase = async () => {
+    try {
+      setIsSubmitting(true)
+      setError(null)
+
+      const orderData = {
+        items: cart.map(item => ({
+          id: item.id,
+          quantity: item.quantity
+        })),
+        customer: formData,
+        paymentMethod
+      }
+
+      const response = await ordersAPI.create(orderData)
+      
+      if (response.success) {
+        setShowSuccess(true)
+        clearCart()
+        setTimeout(() => {
+          navigate('/')
+        }, 3000)
+      }
+    } catch (err) {
+      setError(err.message || 'Error al procesar la orden. Por favor, intenta nuevamente.')
+      setShowConfirmModal(false)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (cart.length === 0) {
@@ -77,6 +103,13 @@ const Checkout = () => {
   return (
     <div className="main-content checkout-main">
       <h1 className="checkout-title">💳 Finalizar Compra</h1>
+      
+      {error && (
+        <div className="checkout-error">
+          <p>❌ {error}</p>
+        </div>
+      )}
+
       <div className="checkout-grid">
         {/* Resumen del carrito */}
         <div className="card checkout-card">
@@ -217,8 +250,9 @@ const Checkout = () => {
             <button 
               type="submit" 
               className="btn checkout-confirm-btn"
+              disabled={isSubmitting}
             >
-              💳 Confirmar Compra - ${total.toLocaleString()}
+              {isSubmitting ? '⏳ Procesando...' : `💳 Confirmar Compra - $${total.toLocaleString()}`}
             </button>
           </form>
         </div>
@@ -227,11 +261,11 @@ const Checkout = () => {
       {/* Modal de confirmación de compra */}
       <ConfirmModal
         isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
+        onClose={() => !isSubmitting && setShowConfirmModal(false)}
         onConfirm={confirmPurchase}
         title="Confirmar Compra"
         message={`¿Estás seguro de que quieres realizar la compra por $${total.toLocaleString()}? Esta acción no se puede deshacer.`}
-        confirmText="Confirmar Compra"
+        confirmText={isSubmitting ? "Procesando..." : "Confirmar Compra"}
         cancelText="Cancelar"
       />
     </div>

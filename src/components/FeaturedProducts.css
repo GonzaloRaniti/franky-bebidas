@@ -1,8 +1,10 @@
 .featured-products-section {
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%);
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
 }
 
 .featured-products-deco {
@@ -23,21 +25,22 @@
 }
 
 .featured-products-title {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffd700;
   font-weight: 800;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .featured-products-desc {
   font-size: 1.2rem;
-  color: #718096;
+  color: rgba(255, 255, 255, 0.7);
   max-width: 600px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.8;
+  font-weight: 400;
 }
 
 .featured-products-grid {

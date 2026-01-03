@@ -1,6 +1,7 @@
 import { useCart } from '../context/CartContext'
 import { useState } from 'react'
 import ConfirmModal from './ConfirmModal'
+import { getProductImage } from '../utils/imageMapper'
 import './ProductCard.css'
 
 const ProductCard = ({ product }) => {
@@ -8,6 +9,8 @@ const ProductCard = ({ product }) => {
   const [added, setAdded] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
+  
+  const productImage = getProductImage(product.image)
 
   const handleAddToCart = () => {
     setShowAddModal(true)
@@ -34,12 +37,13 @@ const ProductCard = ({ product }) => {
         )}
         {/* Imagen del producto */}
         <div className="product-card-image">
-          {!imageError && product.image ? (
+          {!imageError && productImage ? (
             <img 
-              src={product.image} 
+              src={productImage} 
               alt={product.name}
               className="product-card-img"
               onError={handleImageError}
+              loading="lazy"
             />
           ) : (
             <span className="product-card-emoji">

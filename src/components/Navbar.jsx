@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import CartModal from './CartModal'
 import menuIcon from '../assets/menu .png'
 import cartIcon from '../assets/carrito-de-compras.png'
@@ -10,6 +11,7 @@ const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { cart } = useCart()
+  const { isAuthenticated } = useAuth()
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   const toggleMobileMenu = () => {
@@ -42,7 +44,11 @@ const Navbar = () => {
           <Link to="/sobre-nosotros" className="nav-link">Sobre Nosotros</Link>
           <Link to="/productos" className="nav-link">Productos</Link>
           <Link to="/contacto" className="nav-link">Contacto</Link>
-          <Link to="/admin" className="nav-link admin-link">📊 Admin</Link>
+          {isAuthenticated ? (
+            <Link to="/admin" className="nav-link admin-link">📊 Admin</Link>
+          ) : (
+            <Link to="/login" className="nav-link admin-link">🔐 Login</Link>
+          )}
           <button 
             onClick={() => setCartOpen(true)} 
             className="cart-button"
@@ -118,13 +124,23 @@ const Navbar = () => {
             >
               Contacto
             </Link>
-            <Link 
-              to="/admin" 
-              onClick={closeMobileMenu}
-              className="mobile-nav-link admin-link"
-            >
-              📊 Admin
-            </Link>
+            {isAuthenticated ? (
+              <Link 
+                to="/admin" 
+                onClick={closeMobileMenu}
+                className="mobile-nav-link admin-link"
+              >
+                📊 Admin
+              </Link>
+            ) : (
+              <Link 
+                to="/login" 
+                onClick={closeMobileMenu}
+                className="mobile-nav-link admin-link"
+              >
+                🔐 Login
+              </Link>
+            )}
           </div>
         </div>
       )}

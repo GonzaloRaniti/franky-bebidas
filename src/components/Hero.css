@@ -72,17 +72,15 @@
   animation: slideInUp 1s ease-out;
 }
 .hero-title {
-  font-size: 5rem;
+  font-size: 5.5rem;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 50%, #ff8c00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffd700;
   font-weight: 900;
   line-height: 1;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  letter-spacing: 2px;
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+  letter-spacing: 4px;
   text-transform: uppercase;
+  animation: fadeInDown 1s ease-out;
 }
 .hero-subtitle {
   font-size: 2.8rem;

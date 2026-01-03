@@ -1,19 +1,31 @@
 import { useState, useEffect } from 'react'
+import { analyticsAPI, messagesAPI } from '../services/api'
 import './AnalyticsDashboard.css'
 
 const AnalyticsDashboard = () => {
   const [analytics, setAnalytics] = useState({})
   const [mensajes, setMensajes] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     cargarDatos()
   }, [])
 
-  const cargarDatos = () => {
-    const analyticsGuardados = JSON.parse(localStorage.getItem('contactAnalytics') || '{}')
-    const mensajesGuardados = JSON.parse(localStorage.getItem('mensajesContacto') || '[]')
-    setAnalytics(analyticsGuardados)
-    setMensajes(mensajesGuardados)
+  const cargarDatos = async () => {
+    try {
+      setLoading(true)
+      const [analyticsResponse, messagesResponse] = await Promise.all([
+        analyticsAPI.getContact(),
+        messagesAPI.getAll()
+      ])
+      
+      setAnalytics(analyticsResponse.data || {})
+      setMensajes(messagesResponse.data || [])
+    } catch (error) {
+      console.error('Error al cargar analytics:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const obtenerEstadisticas = () => {
@@ -71,6 +83,17 @@ const AnalyticsDashboard = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="analytics-dashboard-container">
+        <div className="analytics-header">
+          <h2>📊 Dashboard de Analytics</h2>
+          <p>⏳ Cargando estadísticas...</p>
         </div>
       </div>
     )

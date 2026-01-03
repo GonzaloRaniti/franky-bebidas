@@ -1,18 +1,36 @@
-import { useState } from 'react'
-import products from '../data/products'
+import { useState, useEffect } from 'react'
+import { productsAPI } from '../services/api'
 import ProductCard from '../components/ProductCard'
 import './Products.css'
 
 const Products = () => {
   const [filter, setFilter] = useState('todos')
   const [searchTerm, setSearchTerm] = useState('')
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = filter === 'todos' || product.category === filter
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true)
+        const params = {}
+        if (filter !== 'todos') params.category = filter
+        if (searchTerm) params.search = searchTerm
+        
+        const response = await productsAPI.getAll(params)
+        setProducts(response.data || [])
+        setError(null)
+      } catch (err) {
+        setError('Error al cargar productos. Por favor, intenta nuevamente.')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadProducts()
+  }, [filter, searchTerm])
 
   return (
     <div className="products-page">
@@ -49,14 +67,28 @@ const Products = () => {
       {/* Resultados */}
       <div className="products-results">
         <p className="results-count">
-          {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''} encontrado{filteredProducts.length !== 1 ? 's' : ''}
+          {loading ? 'Cargando...' : (
+            `${products.length} producto${products.length !== 1 ? 's' : ''} encontrado${products.length !== 1 ? 's' : ''}`
+          )}
         </p>
       </div>
 
+      {/* Error */}
+      {error && (
+        <div className="products-error">
+          <p>{error}</p>
+        </div>
+      )}
+
       {/* Grid de productos */}
       <div className="products-grid">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map(product => (
+        {loading ? (
+          <div className="products-loading">
+            <span className="loading-icon">⏳</span>
+            <p>Cargando productos...</p>
+          </div>
+        ) : products.length > 0 ? (
+          products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))
         ) : (

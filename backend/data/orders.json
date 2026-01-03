@@ -1,0 +1,36 @@
+[
+  {
+    "id": "06e387e0-91a7-4efa-92c8-5af13a160383",
+    "orderNumber": "ORD-1767186405818",
+    "items": [
+      {
+        "id": 2,
+        "name": "Vino Malbec 750ml",
+        "price": 2500,
+        "quantity": 1,
+        "subtotal": 2500
+      },
+      {
+        "id": 1,
+        "name": "Cerveza Rubia 1L",
+        "price": 1200,
+        "quantity": 1,
+        "subtotal": 1200
+      }
+    ],
+    "customer": {
+      "nombre": "Gonzalo Gabriel",
+      "apellido": "Raniti",
+      "email": "gonzalog.raniti@gmail.com",
+      "telefono": "01121628155",
+      "direccion": "Jose ingenieros y centenario",
+      "ciudad": "Ciudad Autónoma de Buenos Aires (CABA)",
+      "codigoPostal": "1643"
+    },
+    "paymentMethod": "mercadopago",
+    "total": 3700,
+    "status": "pending",
+    "createdAt": "2025-12-31T13:06:45.818Z",
+    "updatedAt": "2025-12-31T13:06:45.818Z"
+  }
+

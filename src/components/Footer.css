@@ -1,8 +1,11 @@
 .footer {
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 46, 0.95) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
   color: #e2e8f0;
   padding: 3rem 2rem 2rem;
   margin-top: auto;
+  border-top: 1px solid rgba(255, 215, 0, 0.15);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .footer-container {

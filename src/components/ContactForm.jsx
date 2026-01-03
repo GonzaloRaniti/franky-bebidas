@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useState, useEffect } from 'react'
+import { messagesAPI } from '../services/api'
 import './ContactForm.css'
 
 const initialValues = {
@@ -61,41 +62,22 @@ const ContactForm = () => {
     setTimeout(() => setShowNotification(false), 3000)
   }
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    setTimeout(() => {
-      // Guardar en localStorage
-      const formData = {
-        ...values,
-        fecha: new Date().toISOString(),
-        id: Date.now(),
-        estado: 'nuevo'
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await messagesAPI.create(values)
+      
+      if (response.success) {
+        // Limpiar borrador
+        localStorage.removeItem('contactFormDraft')
+        
+        showToast('¡Mensaje enviado exitosamente!', 'success')
+        resetForm()
       }
-      
-      // Obtener mensajes existentes o crear array vacío
-      const mensajesExistentes = JSON.parse(localStorage.getItem('mensajesContacto') || '[]')
-      
-      // Agregar nuevo mensaje
-      mensajesExistentes.push(formData)
-      
-      // Guardar en localStorage
-      localStorage.setItem('mensajesContacto', JSON.stringify(mensajesExistentes))
-      
-      // Limpiar borrador
-      localStorage.removeItem('contactFormDraft')
-      
-      // Actualizar analytics
-      const analytics = JSON.parse(localStorage.getItem('contactAnalytics') || '{}')
-      analytics.totalMensajes = (analytics.totalMensajes || 0) + 1
-      analytics.ultimoEnvio = new Date().toISOString()
-      analytics.mensajesPorDia = analytics.mensajesPorDia || {}
-      const hoy = new Date().toDateString()
-      analytics.mensajesPorDia[hoy] = (analytics.mensajesPorDia[hoy] || 0) + 1
-      localStorage.setItem('contactAnalytics', JSON.stringify(analytics))
-      
-      showToast('¡Mensaje enviado y guardado exitosamente!', 'success')
+    } catch (error) {
+      showToast(error.message || 'Error al enviar el mensaje. Por favor, intenta nuevamente.', 'error')
+    } finally {
       setSubmitting(false)
-      resetForm()
-    }, 1000)
+    }
   }
 
   return (
